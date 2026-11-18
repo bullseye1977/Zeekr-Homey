@@ -1,0 +1,284 @@
+{
+  "triggers": [
+    {
+      "id": "charging_started",
+      "title": { "en": "Charging started", "nl": "Laden is gestart" },
+      "tokens": [
+        { "name": "battery", "type": "number", "title": { "en": "Battery %", "nl": "Accu %" }, "example": 45 }
+      ]
+    },
+    {
+      "id": "charging_stopped",
+      "title": { "en": "Charging stopped", "nl": "Laden is gestopt" },
+      "tokens": [
+        { "name": "battery", "type": "number", "title": { "en": "Battery %", "nl": "Accu %" }, "example": 80 }
+      ]
+    },
+    {
+      "id": "plugged_in",
+      "title": { "en": "Charging cable connected", "nl": "Laadkabel aangesloten" }
+    },
+    {
+      "id": "unplugged",
+      "title": { "en": "Charging cable disconnected", "nl": "Laadkabel losgekoppeld" }
+    },
+    {
+      "id": "climate_turned_on",
+      "title": { "en": "Climate turned on", "nl": "Klimaat is aangegaan" }
+    },
+    {
+      "id": "climate_turned_off",
+      "title": { "en": "Climate turned off", "nl": "Klimaat is uitgegaan" }
+    },
+    {
+      "id": "range_changed",
+      "title": { "en": "Range changed", "nl": "Actieradius is veranderd" },
+      "tokens": [
+        { "name": "range", "type": "number", "title": { "en": "Range (km)", "nl": "Actieradius (km)" }, "example": 312 }
+      ]
+    },
+    {
+      "id": "status_updated",
+      "title": { "en": "Status updated", "nl": "Status is bijgewerkt" },
+      "tokens": [
+        { "name": "battery", "type": "number", "title": { "en": "Battery %", "nl": "Accu %" }, "example": 64 },
+        { "name": "range", "type": "number", "title": { "en": "Range (km)", "nl": "Actieradius (km)" }, "example": 312 },
+        { "name": "latitude", "type": "number", "title": { "en": "Latitude", "nl": "Breedtegraad" }, "example": 52.37 },
+        { "name": "longitude", "type": "number", "title": { "en": "Longitude", "nl": "Lengtegraad" }, "example": 4.89 }
+      ]
+    },
+    {
+      "id": "command_failed",
+      "title": { "en": "A command failed", "nl": "Een commando is mislukt" },
+      "tokens": [
+        { "name": "command", "type": "string", "title": { "en": "Command", "nl": "Commando" }, "example": "climate_on" },
+        { "name": "error", "type": "string", "title": { "en": "Error", "nl": "Foutmelding" }, "example": "Session expired" }
+      ]
+    }
+  ],
+  "conditions": [
+    {
+      "id": "is_charging",
+      "title": { "en": "Is !{{|not}} charging", "nl": "Laadt !{{|niet}}" }
+    },
+    {
+      "id": "is_plugged_in",
+      "title": { "en": "Charging cable is !{{|not}} connected", "nl": "Laadkabel is !{{|niet}} aangesloten" }
+    },
+    {
+      "id": "is_climate_on",
+      "title": { "en": "Climate is !{{on|off}}", "nl": "Klimaat staat !{{aan|uit}}" }
+    },
+    {
+      "id": "battery_above",
+      "title": { "en": "Battery is !{{above|below}} …%", "nl": "Accu is !{{boven|onder}} …%" },
+      "titleFormatted": { "en": "Battery is !{{above|below}} [[percent]]%", "nl": "Accu is !{{boven|onder}} [[percent]]%" },
+      "args": [
+        { "name": "percent", "type": "range", "min": 0, "max": 100, "step": 1, "label": "%", "labelDecimals": 0 }
+      ]
+    },
+    {
+      "id": "range_above",
+      "title": { "en": "Range is !{{above|below}} … km", "nl": "Actieradius is !{{boven|onder}} … km" },
+      "titleFormatted": { "en": "Range is !{{above|below}} [[km]] km", "nl": "Actieradius is !{{boven|onder}} [[km]] km" },
+      "args": [
+        { "name": "km", "type": "number", "min": 0, "max": 1500, "step": 1, "placeholder": { "en": "100" } }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "id": "climate_on",
+      "title": { "en": "Start climate (preheat / cool)", "nl": "Start klimaat (voorverwarmen / koelen)" },
+      "titleFormatted": {
+        "en": "Start climate at [[temperature]] °C for [[duration]] minutes",
+        "nl": "Start klimaat op [[temperature]] °C voor [[duration]] minuten"
+      },
+      "args": [
+        { "name": "temperature", "type": "number", "min": 16, "max": 28, "step": 0.5, "placeholder": { "en": "21" } },
+        { "name": "duration", "type": "number", "min": 1, "max": 30, "step": 1, "placeholder": { "en": "15" } }
+      ]
+    },
+    {
+      "id": "climate_off",
+      "title": { "en": "Stop climate", "nl": "Stop klimaat" }
+    },
+    {
+      "id": "defrost_on",
+      "title": { "en": "Start defrost", "nl": "Start ontdooien" },
+      "titleFormatted": { "en": "Start defrost for [[duration]] minutes", "nl": "Start ontdooien voor [[duration]] minuten" },
+      "args": [
+        { "name": "duration", "type": "number", "min": 1, "max": 30, "step": 1, "placeholder": { "en": "15" } }
+      ]
+    },
+    {
+      "id": "defrost_off",
+      "title": { "en": "Stop defrost", "nl": "Stop ontdooien" }
+    },
+    {
+      "id": "seat_heat",
+      "title": { "en": "Set seat heating", "nl": "Stoelverwarming instellen" },
+      "titleFormatted": { "en": "Set seat heating [[seat]] to [[level]]", "nl": "Zet stoelverwarming [[seat]] op [[level]]" },
+      "args": [
+        {
+          "name": "seat",
+          "type": "dropdown",
+          "values": [
+            { "id": "driver", "title": { "en": "driver", "nl": "bestuurder" } },
+            { "id": "passenger", "title": { "en": "passenger", "nl": "bijrijder" } },
+            { "id": "rear_left", "title": { "en": "rear left", "nl": "achter links" } },
+            { "id": "rear_right", "title": { "en": "rear right", "nl": "achter rechts" } }
+          ]
+        },
+        {
+          "name": "level",
+          "type": "dropdown",
+          "values": [
+            { "id": "0", "title": { "en": "off", "nl": "uit" } },
+            { "id": "1", "title": { "en": "low", "nl": "laag" } },
+            { "id": "2", "title": { "en": "medium", "nl": "midden" } },
+            { "id": "3", "title": { "en": "high", "nl": "hoog" } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "seat_vent",
+      "title": { "en": "Set seat ventilation", "nl": "Stoelventilatie instellen" },
+      "titleFormatted": { "en": "Set seat ventilation [[seat]] to [[level]]", "nl": "Zet stoelventilatie [[seat]] op [[level]]" },
+      "args": [
+        {
+          "name": "seat",
+          "type": "dropdown",
+          "values": [
+            { "id": "driver", "title": { "en": "driver", "nl": "bestuurder" } },
+            { "id": "passenger", "title": { "en": "passenger", "nl": "bijrijder" } },
+            { "id": "rear_left", "title": { "en": "rear left", "nl": "achter links" } },
+            { "id": "rear_right", "title": { "en": "rear right", "nl": "achter rechts" } }
+          ]
+        },
+        {
+          "name": "level",
+          "type": "dropdown",
+          "values": [
+            { "id": "0", "title": { "en": "off", "nl": "uit" } },
+            { "id": "1", "title": { "en": "low", "nl": "laag" } },
+            { "id": "2", "title": { "en": "medium", "nl": "midden" } },
+            { "id": "3", "title": { "en": "high", "nl": "hoog" } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "steering_wheel_heat",
+      "title": { "en": "Turn steering wheel heating on/off", "nl": "Stuurverwarming aan/uit" },
+      "titleFormatted": { "en": "Turn steering wheel heating [[state]]", "nl": "Zet stuurverwarming [[state]]" },
+      "args": [
+        {
+          "name": "state",
+          "type": "dropdown",
+          "values": [
+            { "id": "on", "title": { "en": "on", "nl": "aan" } },
+            { "id": "off", "title": { "en": "off", "nl": "uit" } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "charge_start",
+      "title": { "en": "Start charging", "nl": "Start laden" }
+    },
+    {
+      "id": "charge_stop",
+      "title": { "en": "Stop charging", "nl": "Stop laden" }
+    },
+    {
+      "id": "set_charge_limit",
+      "title": { "en": "Set charge limit", "nl": "Laadlimiet instellen" },
+      "titleFormatted": { "en": "Set charge limit to [[percent]]%", "nl": "Zet laadlimiet op [[percent]]%" },
+      "args": [
+        { "name": "percent", "type": "range", "min": 50, "max": 100, "step": 1, "label": "%", "labelDecimals": 0 }
+      ]
+    },
+    {
+      "id": "battery_preheat",
+      "title": { "en": "Battery preconditioning on/off", "nl": "Accu voorconditioneren aan/uit" },
+      "titleFormatted": { "en": "Turn battery preconditioning [[state]]", "nl": "Zet accu voorconditioneren [[state]]" },
+      "args": [
+        {
+          "name": "state",
+          "type": "dropdown",
+          "values": [
+            { "id": "on", "title": { "en": "on", "nl": "aan" } },
+            { "id": "off", "title": { "en": "off", "nl": "uit" } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "windows",
+      "title": { "en": "Windows", "nl": "Ramen" },
+      "titleFormatted": { "en": "Windows: [[action]]", "nl": "Ramen: [[action]]" },
+      "args": [
+        {
+          "name": "action",
+          "type": "dropdown",
+          "values": [
+            { "id": "close", "title": { "en": "close", "nl": "sluiten" } },
+            { "id": "vent", "title": { "en": "vent (open a little)", "nl": "ventileren (op een kier)" } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "trunk",
+      "title": { "en": "Tailgate", "nl": "Achterklep" },
+      "titleFormatted": { "en": "Tailgate: [[action]]", "nl": "Achterklep: [[action]]" },
+      "args": [
+        {
+          "name": "action",
+          "type": "dropdown",
+          "values": [
+            { "id": "open", "title": { "en": "open", "nl": "openen" } },
+            { "id": "close", "title": { "en": "close", "nl": "sluiten" } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "signal",
+      "title": { "en": "Find my car (lights / horn)", "nl": "Auto zoeken (lichten / claxon)" },
+      "titleFormatted": { "en": "Signal: [[what]]", "nl": "Signaal: [[what]]" },
+      "args": [
+        {
+          "name": "what",
+          "type": "dropdown",
+          "values": [
+            { "id": "flash", "title": { "en": "flash lights", "nl": "lichten knipperen" } },
+            { "id": "honk", "title": { "en": "horn", "nl": "claxon" } },
+            { "id": "both", "title": { "en": "lights + horn", "nl": "lichten + claxon" } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sentry",
+      "title": { "en": "Sentry mode on/off", "nl": "Wachtmodus aan/uit" },
+      "titleFormatted": { "en": "Turn sentry mode [[state]]", "nl": "Zet wachtmodus [[state]]" },
+      "args": [
+        {
+          "name": "state",
+          "type": "dropdown",
+          "values": [
+            { "id": "on", "title": { "en": "on", "nl": "aan" } },
+            { "id": "off", "title": { "en": "off", "nl": "uit" } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "refresh_status",
+      "title": { "en": "Refresh status now", "nl": "Status nu ophalen" }
+    }
+  ]
+}

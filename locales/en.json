@@ -1,0 +1,30 @@
+{
+  "pair": {
+    "not_configured": "First fill in your Zeekr account and keys in the app settings (Homey app → Apps → Zeekr → Configure).",
+    "no_vehicles": "No cars were found on this Zeekr account."
+  },
+  "device": {
+    "logged_in_elsewhere": "Your Zeekr account was logged in on another device (e.g. the Zeekr app). Run any action on this car to log in again, or use a separate account for Homey.",
+    "not_configured": "Zeekr account or keys are missing in the app settings.",
+    "command_failed": "Zeekr command failed: __error__"
+  },
+  "settings": {
+    "title": "Zeekr",
+    "subtitle": "Your Zeekr account and the app keys needed to talk to the Zeekr cloud.",
+    "account": "Zeekr account",
+    "email": "Email address",
+    "password": "Password",
+    "region": "Region",
+    "second_account": "Tip: Zeekr allows only one login at a time. Create a second Zeekr account, share your car with it from the Zeekr app, and use that account here — then the Zeekr app on your phone stays logged in.",
+    "keys": "App keys",
+    "keys_hint": "Paste the keys as JSON (the same format as OpenZeekr's secrets.example.json, or the output of tools/extract-keys.js). They are stored only on your Homey.",
+    "save": "Save",
+    "test": "Test login",
+    "testing": "Logging in…",
+    "saved": "Saved.",
+    "login_ok": "Login OK. Cars on this account:",
+    "login_failed": "Login failed",
+    "bad_json": "The keys are not valid JSON.",
+    "shared": "shared"
+  }
+}

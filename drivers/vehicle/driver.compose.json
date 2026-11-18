@@ -1,0 +1,79 @@
+{
+  "name": { "en": "Zeekr", "nl": "Zeekr" },
+  "class": "car",
+  "platforms": ["local"],
+  "connectivity": ["cloud"],
+  "energy": { "electricCar": true },
+  "capabilities": [
+    "measure_battery",
+    "zeekr_range",
+    "ev_charging_state",
+    "zeekr_charge_power",
+    "locked",
+    "zeekr_climate",
+    "target_temperature",
+    "measure_temperature",
+    "measure_temperature.exterior",
+    "alarm_contact.doors",
+    "alarm_contact.trunk",
+    "alarm_contact.windows",
+    "zeekr_odometer",
+    "zeekr_last_update"
+  ],
+  "capabilitiesOptions": {
+    "measure_battery": { "title": { "en": "Battery", "nl": "Accu" } },
+    "ev_charging_state": { "setable": false },
+    "target_temperature": {
+      "title": { "en": "Climate temperature", "nl": "Klimaattemperatuur" },
+      "min": 16,
+      "max": 28,
+      "step": 0.5
+    },
+    "measure_temperature": { "title": { "en": "Interior temperature", "nl": "Binnentemperatuur" } },
+    "measure_temperature.exterior": { "title": { "en": "Outside temperature", "nl": "Buitentemperatuur" } },
+    "alarm_contact.doors": { "title": { "en": "Door open", "nl": "Portier open" } },
+    "alarm_contact.trunk": { "title": { "en": "Trunk open", "nl": "Achterklep open" } },
+    "alarm_contact.windows": { "title": { "en": "Window open", "nl": "Raam open" } }
+  },
+  "images": {
+    "small": "{{driverAssetsPath}}/images/small.png",
+    "large": "{{driverAssetsPath}}/images/large.png",
+    "xlarge": "{{driverAssetsPath}}/images/xlarge.png"
+  },
+  "pair": [
+    { "id": "list_devices", "template": "list_devices", "navigation": { "next": "add_devices" } },
+    { "id": "add_devices", "template": "add_devices" }
+  ],
+  "settings": [
+    {
+      "id": "poll_interval",
+      "type": "number",
+      "label": { "en": "Status update interval (minutes)", "nl": "Status ophalen elke (minuten)" },
+      "hint": {
+        "en": "How often Homey fetches the car status from the Zeekr cloud.",
+        "nl": "Hoe vaak Homey de status van de auto ophaalt uit de Zeekr-cloud."
+      },
+      "value": 5,
+      "min": 1,
+      "max": 120
+    },
+    {
+      "id": "climate_duration",
+      "type": "number",
+      "label": { "en": "Climate duration (minutes)", "nl": "Duur klimaat (minuten)" },
+      "hint": {
+        "en": "Used when climate is switched on from the device tile.",
+        "nl": "Gebruikt als je het klimaat via de tegel aanzet."
+      },
+      "value": 15,
+      "min": 1,
+      "max": 30
+    },
+    {
+      "id": "vin",
+      "type": "label",
+      "label": { "en": "VIN", "nl": "VIN" },
+      "value": ""
+    }
+  ]
+}

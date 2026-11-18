@@ -1,0 +1,11 @@
+{
+  "type": "number",
+  "title": { "en": "Odometer", "nl": "Kilometerstand" },
+  "units": { "en": "km" },
+  "decimals": 0,
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "icon": "/assets/capabilities/odometer.svg",
+  "insights": true
+}

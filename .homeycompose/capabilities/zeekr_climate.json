@@ -1,0 +1,12 @@
+{
+  "type": "boolean",
+  "title": { "en": "Climate", "nl": "Klimaat (voorverwarmen)" },
+  "getable": true,
+  "setable": true,
+  "uiComponent": "toggle",
+  "uiQuickAction": false,
+  "icon": "/assets/capabilities/climate.svg",
+  "insights": true,
+  "insightsTitleTrue": { "en": "Climate on", "nl": "Klimaat aan" },
+  "insightsTitleFalse": { "en": "Climate off", "nl": "Klimaat uit" }
+}

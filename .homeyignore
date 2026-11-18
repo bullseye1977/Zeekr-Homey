@@ -1,0 +1,5 @@
+test/
+tools/
+README.md
+*.apk
+secrets*.json

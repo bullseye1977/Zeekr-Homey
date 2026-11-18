@@ -1,0 +1,36 @@
+{
+  "id": "com.unofficial.zeekr",
+  "version": "0.1.0",
+  "compatibility": ">=12.4.5",
+  "sdk": 3,
+  "platforms": ["local"],
+  "name": {
+    "en": "Zeekr (unofficial)",
+    "nl": "Zeekr (onofficieel)"
+  },
+  "description": {
+    "en": "Control and monitor your Zeekr car from Homey Flows.",
+    "nl": "Bedien en monitor je Zeekr vanuit Homey Flows."
+  },
+  "category": ["energy"],
+  "permissions": [],
+  "brandColor": "#1E2A38",
+  "images": {
+    "small": "/assets/images/small.png",
+    "large": "/assets/images/large.png",
+    "xlarge": "/assets/images/xlarge.png"
+  },
+  "author": {
+    "name": "Zeekr Homey community"
+  },
+  "contributors": {
+    "developers": [
+      { "name": "Based on OpenZeekr by borconi (MIT)" }
+    ]
+  },
+  "api": {
+    "testLogin": { "method": "POST", "path": "/test-login" },
+    "logout": { "method": "POST", "path": "/logout" },
+    "status": { "method": "GET", "path": "/status" }
+  }
+}

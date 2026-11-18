@@ -1,0 +1,1170 @@
+{
+  "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
+  "id": "com.unofficial.zeekr",
+  "version": "0.1.0",
+  "compatibility": ">=12.4.5",
+  "sdk": 3,
+  "platforms": [
+    "local"
+  ],
+  "name": {
+    "en": "Zeekr (unofficial)",
+    "nl": "Zeekr (onofficieel)"
+  },
+  "description": {
+    "en": "Control and monitor your Zeekr car from Homey Flows.",
+    "nl": "Bedien en monitor je Zeekr vanuit Homey Flows."
+  },
+  "category": [
+    "energy"
+  ],
+  "permissions": [],
+  "brandColor": "#1E2A38",
+  "images": {
+    "small": "/assets/images/small.png",
+    "large": "/assets/images/large.png",
+    "xlarge": "/assets/images/xlarge.png"
+  },
+  "author": {
+    "name": "Zeekr Homey community"
+  },
+  "contributors": {
+    "developers": [
+      {
+        "name": "Based on OpenZeekr by borconi (MIT)"
+      }
+    ]
+  },
+  "api": {
+    "testLogin": {
+      "method": "POST",
+      "path": "/test-login"
+    },
+    "logout": {
+      "method": "POST",
+      "path": "/logout"
+    },
+    "status": {
+      "method": "GET",
+      "path": "/status"
+    }
+  },
+  "flow": {
+    "triggers": [
+      {
+        "id": "charging_started",
+        "title": {
+          "en": "Charging started",
+          "nl": "Laden is gestart"
+        },
+        "tokens": [
+          {
+            "name": "battery",
+            "type": "number",
+            "title": {
+              "en": "Battery %",
+              "nl": "Accu %"
+            },
+            "example": 45
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ]
+      },
+      {
+        "id": "charging_stopped",
+        "title": {
+          "en": "Charging stopped",
+          "nl": "Laden is gestopt"
+        },
+        "tokens": [
+          {
+            "name": "battery",
+            "type": "number",
+            "title": {
+              "en": "Battery %",
+              "nl": "Accu %"
+            },
+            "example": 80
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ]
+      },
+      {
+        "id": "plugged_in",
+        "title": {
+          "en": "Charging cable connected",
+          "nl": "Laadkabel aangesloten"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ]
+      },
+      {
+        "id": "unplugged",
+        "title": {
+          "en": "Charging cable disconnected",
+          "nl": "Laadkabel losgekoppeld"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ]
+      },
+      {
+        "id": "climate_turned_on",
+        "title": {
+          "en": "Climate turned on",
+          "nl": "Klimaat is aangegaan"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ]
+      },
+      {
+        "id": "climate_turned_off",
+        "title": {
+          "en": "Climate turned off",
+          "nl": "Klimaat is uitgegaan"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ]
+      },
+      {
+        "id": "range_changed",
+        "title": {
+          "en": "Range changed",
+          "nl": "Actieradius is veranderd"
+        },
+        "tokens": [
+          {
+            "name": "range",
+            "type": "number",
+            "title": {
+              "en": "Range (km)",
+              "nl": "Actieradius (km)"
+            },
+            "example": 312
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ]
+      },
+      {
+        "id": "status_updated",
+        "title": {
+          "en": "Status updated",
+          "nl": "Status is bijgewerkt"
+        },
+        "tokens": [
+          {
+            "name": "battery",
+            "type": "number",
+            "title": {
+              "en": "Battery %",
+              "nl": "Accu %"
+            },
+            "example": 64
+          },
+          {
+            "name": "range",
+            "type": "number",
+            "title": {
+              "en": "Range (km)",
+              "nl": "Actieradius (km)"
+            },
+            "example": 312
+          },
+          {
+            "name": "latitude",
+            "type": "number",
+            "title": {
+              "en": "Latitude",
+              "nl": "Breedtegraad"
+            },
+            "example": 52.37
+          },
+          {
+            "name": "longitude",
+            "type": "number",
+            "title": {
+              "en": "Longitude",
+              "nl": "Lengtegraad"
+            },
+            "example": 4.89
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ]
+      },
+      {
+        "id": "command_failed",
+        "title": {
+          "en": "A command failed",
+          "nl": "Een commando is mislukt"
+        },
+        "tokens": [
+          {
+            "name": "command",
+            "type": "string",
+            "title": {
+              "en": "Command",
+              "nl": "Commando"
+            },
+            "example": "climate_on"
+          },
+          {
+            "name": "error",
+            "type": "string",
+            "title": {
+              "en": "Error",
+              "nl": "Foutmelding"
+            },
+            "example": "Session expired"
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ]
+      }
+    ],
+    "conditions": [
+      {
+        "id": "is_charging",
+        "title": {
+          "en": "Is !{{|not}} charging",
+          "nl": "Laadt !{{|niet}}"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ]
+      },
+      {
+        "id": "is_plugged_in",
+        "title": {
+          "en": "Charging cable is !{{|not}} connected",
+          "nl": "Laadkabel is !{{|niet}} aangesloten"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ]
+      },
+      {
+        "id": "is_climate_on",
+        "title": {
+          "en": "Climate is !{{on|off}}",
+          "nl": "Klimaat staat !{{aan|uit}}"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ]
+      },
+      {
+        "id": "battery_above",
+        "title": {
+          "en": "Battery is !{{above|below}} …%",
+          "nl": "Accu is !{{boven|onder}} …%"
+        },
+        "titleFormatted": {
+          "en": "Battery is !{{above|below}} [[percent]]%",
+          "nl": "Accu is !{{boven|onder}} [[percent]]%"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          },
+          {
+            "name": "percent",
+            "type": "range",
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "label": "%",
+            "labelDecimals": 0
+          }
+        ]
+      },
+      {
+        "id": "range_above",
+        "title": {
+          "en": "Range is !{{above|below}} … km",
+          "nl": "Actieradius is !{{boven|onder}} … km"
+        },
+        "titleFormatted": {
+          "en": "Range is !{{above|below}} [[km]] km",
+          "nl": "Actieradius is !{{boven|onder}} [[km]] km"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          },
+          {
+            "name": "km",
+            "type": "number",
+            "min": 0,
+            "max": 1500,
+            "step": 1,
+            "placeholder": {
+              "en": "100"
+            }
+          }
+        ]
+      }
+    ],
+    "actions": [
+      {
+        "id": "climate_on",
+        "title": {
+          "en": "Start climate (preheat / cool)",
+          "nl": "Start klimaat (voorverwarmen / koelen)"
+        },
+        "titleFormatted": {
+          "en": "Start climate at [[temperature]] °C for [[duration]] minutes",
+          "nl": "Start klimaat op [[temperature]] °C voor [[duration]] minuten"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          },
+          {
+            "name": "temperature",
+            "type": "number",
+            "min": 16,
+            "max": 28,
+            "step": 0.5,
+            "placeholder": {
+              "en": "21"
+            }
+          },
+          {
+            "name": "duration",
+            "type": "number",
+            "min": 1,
+            "max": 30,
+            "step": 1,
+            "placeholder": {
+              "en": "15"
+            }
+          }
+        ]
+      },
+      {
+        "id": "climate_off",
+        "title": {
+          "en": "Stop climate",
+          "nl": "Stop klimaat"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ]
+      },
+      {
+        "id": "defrost_on",
+        "title": {
+          "en": "Start defrost",
+          "nl": "Start ontdooien"
+        },
+        "titleFormatted": {
+          "en": "Start defrost for [[duration]] minutes",
+          "nl": "Start ontdooien voor [[duration]] minuten"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          },
+          {
+            "name": "duration",
+            "type": "number",
+            "min": 1,
+            "max": 30,
+            "step": 1,
+            "placeholder": {
+              "en": "15"
+            }
+          }
+        ]
+      },
+      {
+        "id": "defrost_off",
+        "title": {
+          "en": "Stop defrost",
+          "nl": "Stop ontdooien"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ]
+      },
+      {
+        "id": "seat_heat",
+        "title": {
+          "en": "Set seat heating",
+          "nl": "Stoelverwarming instellen"
+        },
+        "titleFormatted": {
+          "en": "Set seat heating [[seat]] to [[level]]",
+          "nl": "Zet stoelverwarming [[seat]] op [[level]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          },
+          {
+            "name": "seat",
+            "type": "dropdown",
+            "values": [
+              {
+                "id": "driver",
+                "title": {
+                  "en": "driver",
+                  "nl": "bestuurder"
+                }
+              },
+              {
+                "id": "passenger",
+                "title": {
+                  "en": "passenger",
+                  "nl": "bijrijder"
+                }
+              },
+              {
+                "id": "rear_left",
+                "title": {
+                  "en": "rear left",
+                  "nl": "achter links"
+                }
+              },
+              {
+                "id": "rear_right",
+                "title": {
+                  "en": "rear right",
+                  "nl": "achter rechts"
+                }
+              }
+            ]
+          },
+          {
+            "name": "level",
+            "type": "dropdown",
+            "values": [
+              {
+                "id": "0",
+                "title": {
+                  "en": "off",
+                  "nl": "uit"
+                }
+              },
+              {
+                "id": "1",
+                "title": {
+                  "en": "low",
+                  "nl": "laag"
+                }
+              },
+              {
+                "id": "2",
+                "title": {
+                  "en": "medium",
+                  "nl": "midden"
+                }
+              },
+              {
+                "id": "3",
+                "title": {
+                  "en": "high",
+                  "nl": "hoog"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "seat_vent",
+        "title": {
+          "en": "Set seat ventilation",
+          "nl": "Stoelventilatie instellen"
+        },
+        "titleFormatted": {
+          "en": "Set seat ventilation [[seat]] to [[level]]",
+          "nl": "Zet stoelventilatie [[seat]] op [[level]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          },
+          {
+            "name": "seat",
+            "type": "dropdown",
+            "values": [
+              {
+                "id": "driver",
+                "title": {
+                  "en": "driver",
+                  "nl": "bestuurder"
+                }
+              },
+              {
+                "id": "passenger",
+                "title": {
+                  "en": "passenger",
+                  "nl": "bijrijder"
+                }
+              },
+              {
+                "id": "rear_left",
+                "title": {
+                  "en": "rear left",
+                  "nl": "achter links"
+                }
+              },
+              {
+                "id": "rear_right",
+                "title": {
+                  "en": "rear right",
+                  "nl": "achter rechts"
+                }
+              }
+            ]
+          },
+          {
+            "name": "level",
+            "type": "dropdown",
+            "values": [
+              {
+                "id": "0",
+                "title": {
+                  "en": "off",
+                  "nl": "uit"
+                }
+              },
+              {
+                "id": "1",
+                "title": {
+                  "en": "low",
+                  "nl": "laag"
+                }
+              },
+              {
+                "id": "2",
+                "title": {
+                  "en": "medium",
+                  "nl": "midden"
+                }
+              },
+              {
+                "id": "3",
+                "title": {
+                  "en": "high",
+                  "nl": "hoog"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "steering_wheel_heat",
+        "title": {
+          "en": "Turn steering wheel heating on/off",
+          "nl": "Stuurverwarming aan/uit"
+        },
+        "titleFormatted": {
+          "en": "Turn steering wheel heating [[state]]",
+          "nl": "Zet stuurverwarming [[state]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          },
+          {
+            "name": "state",
+            "type": "dropdown",
+            "values": [
+              {
+                "id": "on",
+                "title": {
+                  "en": "on",
+                  "nl": "aan"
+                }
+              },
+              {
+                "id": "off",
+                "title": {
+                  "en": "off",
+                  "nl": "uit"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "charge_start",
+        "title": {
+          "en": "Start charging",
+          "nl": "Start laden"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ]
+      },
+      {
+        "id": "charge_stop",
+        "title": {
+          "en": "Stop charging",
+          "nl": "Stop laden"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ]
+      },
+      {
+        "id": "set_charge_limit",
+        "title": {
+          "en": "Set charge limit",
+          "nl": "Laadlimiet instellen"
+        },
+        "titleFormatted": {
+          "en": "Set charge limit to [[percent]]%",
+          "nl": "Zet laadlimiet op [[percent]]%"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          },
+          {
+            "name": "percent",
+            "type": "range",
+            "min": 50,
+            "max": 100,
+            "step": 1,
+            "label": "%",
+            "labelDecimals": 0
+          }
+        ]
+      },
+      {
+        "id": "battery_preheat",
+        "title": {
+          "en": "Battery preconditioning on/off",
+          "nl": "Accu voorconditioneren aan/uit"
+        },
+        "titleFormatted": {
+          "en": "Turn battery preconditioning [[state]]",
+          "nl": "Zet accu voorconditioneren [[state]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          },
+          {
+            "name": "state",
+            "type": "dropdown",
+            "values": [
+              {
+                "id": "on",
+                "title": {
+                  "en": "on",
+                  "nl": "aan"
+                }
+              },
+              {
+                "id": "off",
+                "title": {
+                  "en": "off",
+                  "nl": "uit"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "windows",
+        "title": {
+          "en": "Windows",
+          "nl": "Ramen"
+        },
+        "titleFormatted": {
+          "en": "Windows: [[action]]",
+          "nl": "Ramen: [[action]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          },
+          {
+            "name": "action",
+            "type": "dropdown",
+            "values": [
+              {
+                "id": "close",
+                "title": {
+                  "en": "close",
+                  "nl": "sluiten"
+                }
+              },
+              {
+                "id": "vent",
+                "title": {
+                  "en": "vent (open a little)",
+                  "nl": "ventileren (op een kier)"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "trunk",
+        "title": {
+          "en": "Tailgate",
+          "nl": "Achterklep"
+        },
+        "titleFormatted": {
+          "en": "Tailgate: [[action]]",
+          "nl": "Achterklep: [[action]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          },
+          {
+            "name": "action",
+            "type": "dropdown",
+            "values": [
+              {
+                "id": "open",
+                "title": {
+                  "en": "open",
+                  "nl": "openen"
+                }
+              },
+              {
+                "id": "close",
+                "title": {
+                  "en": "close",
+                  "nl": "sluiten"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "signal",
+        "title": {
+          "en": "Find my car (lights / horn)",
+          "nl": "Auto zoeken (lichten / claxon)"
+        },
+        "titleFormatted": {
+          "en": "Signal: [[what]]",
+          "nl": "Signaal: [[what]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          },
+          {
+            "name": "what",
+            "type": "dropdown",
+            "values": [
+              {
+                "id": "flash",
+                "title": {
+                  "en": "flash lights",
+                  "nl": "lichten knipperen"
+                }
+              },
+              {
+                "id": "honk",
+                "title": {
+                  "en": "horn",
+                  "nl": "claxon"
+                }
+              },
+              {
+                "id": "both",
+                "title": {
+                  "en": "lights + horn",
+                  "nl": "lichten + claxon"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "sentry",
+        "title": {
+          "en": "Sentry mode on/off",
+          "nl": "Wachtmodus aan/uit"
+        },
+        "titleFormatted": {
+          "en": "Turn sentry mode [[state]]",
+          "nl": "Zet wachtmodus [[state]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          },
+          {
+            "name": "state",
+            "type": "dropdown",
+            "values": [
+              {
+                "id": "on",
+                "title": {
+                  "en": "on",
+                  "nl": "aan"
+                }
+              },
+              {
+                "id": "off",
+                "title": {
+                  "en": "off",
+                  "nl": "uit"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "refresh_status",
+        "title": {
+          "en": "Refresh status now",
+          "nl": "Status nu ophalen"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ]
+      }
+    ]
+  },
+  "drivers": [
+    {
+      "name": {
+        "en": "Zeekr",
+        "nl": "Zeekr"
+      },
+      "class": "car",
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "cloud"
+      ],
+      "energy": {
+        "electricCar": true
+      },
+      "capabilities": [
+        "measure_battery",
+        "zeekr_range",
+        "ev_charging_state",
+        "zeekr_charge_power",
+        "locked",
+        "zeekr_climate",
+        "target_temperature",
+        "measure_temperature",
+        "measure_temperature.exterior",
+        "alarm_contact.doors",
+        "alarm_contact.trunk",
+        "alarm_contact.windows",
+        "zeekr_odometer",
+        "zeekr_last_update"
+      ],
+      "capabilitiesOptions": {
+        "measure_battery": {
+          "title": {
+            "en": "Battery",
+            "nl": "Accu"
+          }
+        },
+        "ev_charging_state": {
+          "setable": false
+        },
+        "target_temperature": {
+          "title": {
+            "en": "Climate temperature",
+            "nl": "Klimaattemperatuur"
+          },
+          "min": 16,
+          "max": 28,
+          "step": 0.5
+        },
+        "measure_temperature": {
+          "title": {
+            "en": "Interior temperature",
+            "nl": "Binnentemperatuur"
+          }
+        },
+        "measure_temperature.exterior": {
+          "title": {
+            "en": "Outside temperature",
+            "nl": "Buitentemperatuur"
+          }
+        },
+        "alarm_contact.doors": {
+          "title": {
+            "en": "Door open",
+            "nl": "Portier open"
+          }
+        },
+        "alarm_contact.trunk": {
+          "title": {
+            "en": "Trunk open",
+            "nl": "Achterklep open"
+          }
+        },
+        "alarm_contact.windows": {
+          "title": {
+            "en": "Window open",
+            "nl": "Raam open"
+          }
+        }
+      },
+      "images": {
+        "small": "/drivers/vehicle/assets/images/small.png",
+        "large": "/drivers/vehicle/assets/images/large.png",
+        "xlarge": "/drivers/vehicle/assets/images/xlarge.png"
+      },
+      "pair": [
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_devices"
+          }
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ],
+      "settings": [
+        {
+          "id": "poll_interval",
+          "type": "number",
+          "label": {
+            "en": "Status update interval (minutes)",
+            "nl": "Status ophalen elke (minuten)"
+          },
+          "hint": {
+            "en": "How often Homey fetches the car status from the Zeekr cloud.",
+            "nl": "Hoe vaak Homey de status van de auto ophaalt uit de Zeekr-cloud."
+          },
+          "value": 5,
+          "min": 1,
+          "max": 120
+        },
+        {
+          "id": "climate_duration",
+          "type": "number",
+          "label": {
+            "en": "Climate duration (minutes)",
+            "nl": "Duur klimaat (minuten)"
+          },
+          "hint": {
+            "en": "Used when climate is switched on from the device tile.",
+            "nl": "Gebruikt als je het klimaat via de tegel aanzet."
+          },
+          "value": 15,
+          "min": 1,
+          "max": 30
+        },
+        {
+          "id": "vin",
+          "type": "label",
+          "label": {
+            "en": "VIN",
+            "nl": "VIN"
+          },
+          "value": ""
+        }
+      ],
+      "id": "vehicle"
+    }
+  ],
+  "capabilities": {
+    "zeekr_charge_power": {
+      "type": "number",
+      "title": {
+        "en": "Charging power",
+        "nl": "Laadvermogen"
+      },
+      "units": {
+        "en": "kW"
+      },
+      "decimals": 1,
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "icon": "/assets/capabilities/charge.svg",
+      "insights": true
+    },
+    "zeekr_climate": {
+      "type": "boolean",
+      "title": {
+        "en": "Climate",
+        "nl": "Klimaat (voorverwarmen)"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "toggle",
+      "uiQuickAction": false,
+      "icon": "/assets/capabilities/climate.svg",
+      "insights": true,
+      "insightsTitleTrue": {
+        "en": "Climate on",
+        "nl": "Klimaat aan"
+      },
+      "insightsTitleFalse": {
+        "en": "Climate off",
+        "nl": "Klimaat uit"
+      }
+    },
+    "zeekr_last_update": {
+      "type": "string",
+      "title": {
+        "en": "Last update",
+        "nl": "Laatste update"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "icon": "/assets/capabilities/clock.svg"
+    },
+    "zeekr_odometer": {
+      "type": "number",
+      "title": {
+        "en": "Odometer",
+        "nl": "Kilometerstand"
+      },
+      "units": {
+        "en": "km"
+      },
+      "decimals": 0,
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "icon": "/assets/capabilities/odometer.svg",
+      "insights": true
+    },
+    "zeekr_range": {
+      "type": "number",
+      "title": {
+        "en": "Range",
+        "nl": "Actieradius"
+      },
+      "units": {
+        "en": "km"
+      },
+      "decimals": 0,
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "icon": "/assets/capabilities/range.svg",
+      "insights": true
+    }
+  }
+}

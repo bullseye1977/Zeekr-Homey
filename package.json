@@ -1,0 +1,15 @@
+{
+  "name": "com.unofficial.zeekr",
+  "version": "0.1.0",
+  "description": "Unofficial Homey app for Zeekr cars (cloud remote control + status), based on OpenZeekr",
+  "main": "app.js",
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "validate": "homey app validate --level debug",
+    "extract-keys": "node tools/extract-keys.js"
+  },
+  "engines": { "node": ">=18" },
+  "dependencies": {}
+}

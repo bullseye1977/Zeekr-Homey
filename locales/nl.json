@@ -1,0 +1,30 @@
+{
+  "pair": {
+    "not_configured": "Vul eerst je Zeekr-account en sleutels in bij de app-instellingen (Homey-app → Apps → Zeekr → Configureren).",
+    "no_vehicles": "Er zijn geen auto's gevonden op dit Zeekr-account."
+  },
+  "device": {
+    "logged_in_elsewhere": "Je Zeekr-account is op een ander apparaat ingelogd (bijv. de Zeekr-app). Voer een actie uit op deze auto om opnieuw in te loggen, of gebruik een apart account voor Homey.",
+    "not_configured": "Zeekr-account of sleutels ontbreken in de app-instellingen.",
+    "command_failed": "Zeekr-commando mislukt: __error__"
+  },
+  "settings": {
+    "title": "Zeekr",
+    "subtitle": "Je Zeekr-account en de app-sleutels die nodig zijn om met de Zeekr-cloud te praten.",
+    "account": "Zeekr-account",
+    "email": "E-mailadres",
+    "password": "Wachtwoord",
+    "region": "Regio",
+    "second_account": "Tip: Zeekr staat maar één login tegelijk toe. Maak een tweede Zeekr-account, deel je auto daarmee vanuit de Zeekr-app, en gebruik dat account hier — dan blijft de Zeekr-app op je telefoon ingelogd.",
+    "keys": "App-sleutels",
+    "keys_hint": "Plak de sleutels als JSON (hetzelfde formaat als secrets.example.json van OpenZeekr, of de uitvoer van tools/extract-keys.js). Ze worden alleen op je Homey opgeslagen.",
+    "save": "Opslaan",
+    "test": "Test inloggen",
+    "testing": "Bezig met inloggen…",
+    "saved": "Opgeslagen.",
+    "login_ok": "Inloggen gelukt. Auto's op dit account:",
+    "login_failed": "Inloggen mislukt",
+    "bad_json": "De sleutels zijn geen geldige JSON.",
+    "shared": "gedeeld"
+  }
+}

@@ -1,0 +1,132 @@
+<!doctype html>
+<html>
+<head>
+  <script type="text/javascript" src="/homey.js" data-origin="settings"></script>
+  <style>
+    .hint { color: #777; font-size: 0.9em; margin: 4px 0 12px; }
+    textarea { width: 100%; min-height: 140px; font-family: monospace; font-size: 12px; }
+    .ok { color: #2e7d32; }
+    .err { color: #c62828; }
+    .keys li { font-family: monospace; }
+    #result { white-space: pre-wrap; margin-top: 12px; }
+  </style>
+</head>
+<body>
+  <header class="homey-header">
+    <h1 class="homey-title" data-i18n="settings.title">Zeekr</h1>
+    <p class="homey-subtitle" data-i18n="settings.subtitle"></p>
+  </header>
+
+  <fieldset class="homey-form-fieldset">
+    <legend class="homey-form-legend" data-i18n="settings.account"></legend>
+
+    <div class="homey-form-group">
+      <label class="homey-form-label" for="email" data-i18n="settings.email"></label>
+      <input class="homey-form-input" id="email" type="email" autocomplete="off" />
+    </div>
+    <div class="homey-form-group">
+      <label class="homey-form-label" for="password" data-i18n="settings.password"></label>
+      <input class="homey-form-input" id="password" type="password" autocomplete="off" />
+    </div>
+    <div class="homey-form-group">
+      <label class="homey-form-label" for="region" data-i18n="settings.region"></label>
+      <select class="homey-form-select" id="region">
+        <option value="EU">Europe (EU)</option>
+        <option value="SEA">Australia + SEA</option>
+        <option value="LA">Latin America</option>
+        <option value="ME">Middle East</option>
+      </select>
+    </div>
+    <p class="hint" data-i18n="settings.second_account"></p>
+  </fieldset>
+
+  <fieldset class="homey-form-fieldset">
+    <legend class="homey-form-legend" data-i18n="settings.keys"></legend>
+    <p class="hint" data-i18n="settings.keys_hint"></p>
+    <textarea id="secrets" spellcheck="false" placeholder='{ "hmac_access_key": "...", "hmac_secret_key": "...", "password_public_key": "...", "prod_secret": "...", "vin_key": "...", "vin_iv": "..." }'></textarea>
+    <ul class="keys" id="keyStatus"></ul>
+  </fieldset>
+
+  <button class="homey-button-primary-full" id="save" data-i18n="settings.save"></button>
+  <br /><br />
+  <button class="homey-button-secondary-full" id="test" data-i18n="settings.test"></button>
+  <div id="result"></div>
+
+  <script type="text/javascript">
+    const REQUIRED = ['hmac_access_key', 'hmac_secret_key', 'password_public_key', 'prod_secret', 'vin_key', 'vin_iv'];
+    const MASK = '••••••••';
+    let stored = {};
+
+    function $(id) { return document.getElementById(id); }
+    function show(cls, text) {
+      $('result').className = cls;
+      $('result').textContent = text;
+    }
+    function get(Homey, key) {
+      return new Promise((resolve) => Homey.get(key, (err, v) => resolve(err ? null : v)));
+    }
+    function set(Homey, key, value) {
+      return new Promise((resolve, reject) => Homey.set(key, value, (err) => (err ? reject(err) : resolve())));
+    }
+
+    function renderKeyStatus(Homey, secrets) {
+      $('keyStatus').innerHTML = REQUIRED.map((k) => {
+        const ok = secrets && String(secrets[k] || '').trim();
+        return `<li class="${ok ? 'ok' : 'err'}">${ok ? '✓' : '✗'} ${k}</li>`;
+      }).join('');
+    }
+
+    /** Accepts the OpenZeekr export / secrets.example.json shape; ignores unknown fields. */
+    function parseSecrets(Homey, text) {
+      const t = text.trim();
+      if (!t || t === MASK) return null; // unchanged
+      let obj;
+      try { obj = JSON.parse(t); } catch (e) { throw new Error(Homey.__('settings.bad_json')); }
+      const out = {};
+      for (const k of REQUIRED) if (obj[k] != null && String(obj[k]).trim()) out[k] = String(obj[k]).trim();
+      return out;
+    }
+
+    function onHomeyReady(Homey) {
+      (async () => {
+        $('email').value = (await get(Homey, 'email')) || '';
+        $('password').value = (await get(Homey, 'password')) ? MASK : '';
+        $('region').value = (await get(Homey, 'region')) || 'EU';
+        stored = (await get(Homey, 'secrets')) || {};
+        $('secrets').value = Object.keys(stored).length ? MASK : '';
+        renderKeyStatus(Homey, stored);
+        Homey.ready();
+      })();
+
+      $('save').addEventListener('click', async () => {
+        show('', '');
+        try {
+          const secrets = parseSecrets(Homey, $('secrets').value);
+          await set(Homey, 'email', $('email').value.trim());
+          if ($('password').value && $('password').value !== MASK) await set(Homey, 'password', $('password').value);
+          await set(Homey, 'region', $('region').value);
+          if (secrets) {
+            stored = { ...stored, ...secrets };
+            await set(Homey, 'secrets', stored);
+            $('secrets').value = MASK;
+          }
+          renderKeyStatus(Homey, stored);
+          show('ok', Homey.__('settings.saved'));
+        } catch (err) {
+          show('err', err.message);
+        }
+      });
+
+      $('test').addEventListener('click', () => {
+        show('', Homey.__('settings.testing'));
+        Homey.api('POST', '/test-login', {}, (err, res) => {
+          if (err) { show('err', err.message || String(err)); return; }
+          if (!res.ok) { show('err', `${Homey.__('settings.login_failed')}: ${res.error}`); return; }
+          const cars = res.vehicles.map((v) => `• ${v.name}${v.model ? ` (${v.model})` : ''}${v.isOwner ? '' : ` – ${Homey.__('settings.shared')}`}`).join('\n');
+          show('ok', `${Homey.__('settings.login_ok')}\n${cars}`);
+        });
+      });
+    }
+  </script>
+</body>
+</html>
