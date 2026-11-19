@@ -1,54 +1,41 @@
-# Zeekr voor Homey (onofficieel)
+# Zeekr for Homey (unofficial)
 
-Een onofficiële Homey-app waarmee je je Zeekr-auto via **Homey Flows** kunt bedienen en
-uitlezen: voorverwarmen/koelen, laden starten/stoppen, laadlimiet, vergrendelen, en status
-zoals accu %, actieradius, laadvermogen, binnen-/buitentemperatuur en deuren/ramen.
+An **unofficial** Homey app to control and read out your Zeekr car from **Homey Flows**:
+preheat/cool, start/stop charging, set a charge limit, lock, and read battery %, range,
+charging power, interior/exterior temperature and door/window state.
 
-De cloud-laag is overgezet (in JavaScript) uit het reverse-engineering-werk van
-**[OpenZeekr](https://github.com/borconi/openzeekr)** (MIT) van borconi. Deze app praat met
-dezelfde Geely/ECARX TSP-cloud. De Bluetooth digitale sleutel van OpenZeekr zit er bewust
-**niet** in — die werkt alleen vlak bij de auto en is voor Homey niet nodig.
+The cloud layer is **ported from [OpenZeekr](https://github.com/borconi/openzeekr)** (MIT) and
+talks to the same Geely/ECARX TSP cloud. The Bluetooth digital key of OpenZeekr is deliberately
+left out — it only works next to the car and isn't needed for cloud control.
 
-> ⚠️ Gebruik dit alleen met je **eigen** Zeekr-account en auto. Het is een onofficiële,
-> reverse-engineered koppeling: Zeekr kan de API zonder aankondiging veranderen, waarna de app
-> pas weer werkt nadat iemand hem aanpast. Geen garantie, geen support. Alleen EU is end-to-end
-> geverifieerd; andere regio's zijn onbeproefd.
+> ⚠️ **Proof of concept.** Built with AI assistance by someone with no coding/app-maintenance
+> experience, as inspiration for a properly maintained, store-ready Zeekr app for Homey. It works,
+> but there is no warranty and no guaranteed support. Use with your **own** account and car only.
+> It's reverse-engineered and unofficial: Zeekr can change the API without notice. Only **EU** is
+> verified end-to-end.
 
-## Belangrijk vooraf
+## Requirements
 
-**1. Eén login tegelijk.** De Zeekr-cloud staat per account maar één actieve sessie toe. Logt
-Homey in, dan word je uitgelogd in de officiële Zeekr-app, en andersom. **Aanbevolen:** maak
-een **tweede Zeekr-account** (ander e-mailadres), **deel je auto** daarmee vanuit je
-hoofdaccount (in de Zeekr-app), en gebruik dat tweede account in Homey. Dan blijft de app op je
-telefoon gewoon ingelogd. Raakt Homey toch uitgelogd ("op een ander apparaat ingelogd"), dan
-logt een flow-actie of een tik op de tegel Homey weer in.
+- **Homey Pro (2023)** — installed via the Homey CLI (it's not in the App Store; see below).
+- **Node.js 18+** on your computer (for the CLI and the key-extraction tool).
+- A **Zeekr account** and the **six app keys** you extract from the official OpenZeekr APK (below).
+- The official **OpenZeekr release APK** — download it from
+  [borconi/openzeekr releases](https://github.com/borconi/openzeekr/releases/latest).
 
-**2. App-sleutels.** De app heeft zes sleutels nodig die Zeekr niet publiceert (dezelfde die
-OpenZeekr gebruikt). De officiële OpenZeekr-APK heeft ze ingebouwd. Haal ze uit die APK met het
-meegeleverde script (zie hieronder) en plak ze één keer in de app-instellingen. De sleutels
-staan alleen op je eigen Homey.
+> **One login per account.** The Zeekr cloud allows only one active session per account: logging in
+> from Homey logs you out of the official Zeekr app, and vice-versa. Recommended: create a **second
+> Zeekr account**, share your car to it from your main account, and use that second account in Homey.
 
-## Stap 1 — Sleutels uit je OpenZeekr-APK halen
-
-Je hebt nodig: de **OpenZeekr release-APK** (die je op je telefoon gebruikt — download hem van
-<https://github.com/borconi/openzeekr/releases>) en **Node.js 18+** op je computer.
+## Download
 
 ```bash
-node tools/extract-keys.js pad/naar/openzeekr.apk zeekr-keys.json
+git clone https://github.com/bullseye1977/Zeekr-Homey.git
+cd Zeekr-Homey
 ```
 
-Het script leest de sleutels uit de APK (geen root of Frida nodig), schrijft ze naar
-`zeekr-keys.json` en stuurt niets naar buiten. Het ondersteunt `arm64-v8a`- en `x86_64`-builds.
-Open daarna `zeekr-keys.json`, kopieer de inhoud, en bewaar hem voor stap 3. **Verwijder het
-bestand als je klaar bent** en zet het nooit online.
+Or on the repo page: **Code → Download ZIP**, then unzip it.
 
-> Gebruik je OpenZeekr al en heb je de sleutels daar al als JSON geëxporteerd (Instellingen →
-> Exporteren), dan kun je stap 1 overslaan en die JSON in stap 3 gebruiken.
-
-## Stap 2 — De app op je Homey zetten
-
-Homey Pro (2023) nodig. Installeer de [Homey CLI](https://apps.developer.homey.app/) en, in deze
-map:
+## Install on your Homey
 
 ```bash
 npm install -g homey
@@ -56,55 +43,59 @@ homey login
 homey app install
 ```
 
-De app verschijnt dan bij je Homey-apps.
+`homey app install` builds and installs the app straight onto your Homey — no Docker needed.
 
-## Stap 3 — Account en sleutels invullen
+## Get your own keys
 
-Homey-app → **Apps** → **Zeekr (onofficieel)** → **Configureren**:
+No Zeekr secrets are shipped. Extract the six keys from **your own** OpenZeekr APK (no root or Frida):
 
-1. Vul **e-mailadres**, **wachtwoord** en **regio** in (gebruik je tweede account — zie boven).
-2. Plak bij **App-sleutels** de JSON uit stap 1.
-3. **Opslaan**, dan **Test inloggen**. Je zou je auto('s) in de lijst moeten zien.
+```bash
+node tools/extract-keys.js path/to/openzeekr-x.y.z.apk zeekr-keys.json
+```
 
-Voeg daarna het apparaat toe: **Apparaten** → **+** → **Zeekr** → kies je auto.
+It writes `zeekr-keys.json`. Open it, copy the contents, and paste it into the app settings (below).
+Keep this file private and delete it afterwards — never commit it.
+
+> The APK contains two RSA public keys. If login later fails at the password step (code `4002`), use
+> the `zeekr-keys-alt1.json` the tool also writes.
+
+## Configure and add the car
+
+1. Homey app → **Apps → Zeekr (unofficial) → Configure**.
+2. Enter **email**, **password**, **region** (EU), and paste the **keys JSON**. Save.
+3. Tap **Test login** — it should list your car.
+4. **Devices → + → Zeekr** → add your car.
 
 ## Flows
 
-**Acties:** klimaat starten (temperatuur + duur) / stoppen, ontdooien, stoelverwarming en
--ventilatie per stoel, stuurverwarming, laden starten/stoppen, laadlimiet, accu
-voorconditioneren, ramen (sluiten/ventileren), achterklep, lichten/claxon, wachtmodus, en
-"status nu ophalen".
+**Actions:** start climate (preheat/cool with temperature + duration), defrost, seat heating/
+ventilation per seat, steering-wheel heating, start/stop charging, set charge limit, battery
+preconditioning, windows, tailgate, lights/horn, sentry mode, refresh status.
+**Triggers:** charging started/stopped, cable connected/disconnected, climate on/off, range changed,
+status updated (battery/range/location), command failed.
+**Conditions:** is charging, cable connected, climate on, battery above/below X %, range above/below X km.
 
-**Triggers:** laden gestart/gestopt, kabel aangesloten/losgekoppeld, klimaat aan/uit,
-actieradius veranderd, status bijgewerkt (met accu/actieradius/locatie), commando mislukt.
+Example: *every weekday at 07:00, if the outside temperature is below 3 °C → start climate at 21 °C
+for 15 minutes.*
 
-**Voorwaarden:** laadt de auto, kabel aangesloten, klimaat aan, accu boven/onder X %,
-actieradius boven/onder X km.
+The status is polled automatically (interval configurable per device, default 5 min).
 
-Voorbeeld: *Elke werkdag om 07:00, als de buitentemperatuur onder 3 °C is → Zeekr klimaat
-starten op 21 °C voor 15 minuten.*
-
-De status wordt standaard elke 5 minuten opgehaald (instelbaar per apparaat).
-
-## Ontwikkelen
+## Development
 
 ```bash
-npm test                 # unit-tests (ondertekening, crypto, status, login-flow)
+npm test                 # unit tests (signing, crypto, status, login flow)
 homey app validate --level publish
-homey app run            # live op je Homey, met logs
+homey app run            # live on your Homey, with logs
 ```
 
-De ondertekening (`lib/zeekr/signing.js`) is byte-voor-byte gecontroleerd tegen de
-`zeekr_ev_api`-referentiecode. De sleutel-extractie (`tools/extract-keys.js`) is getest tegen
-gecompileerde fixture-libraries (arm64 en x86_64) met nep-testwaarden.
+The signing (`lib/zeekr/signing.js`) is checked byte-for-byte against the `zeekr_ev_api` reference,
+and the key-extraction tool is tested against compiled fixture libraries (arm64 + x86_64).
 
-## Dankwoord
+## Credits & license
 
-Deze app bestaat dankzij het reverse-engineering-werk van
-[OpenZeekr](https://github.com/borconi/openzeekr) (borconi) en de projecten die daar genoemd
-worden. Zoals daar gebruikelijk: **er worden geen Zeekr-sleutels meegeleverd** — die lever je zelf
-aan vanuit je eigen app-installatie.
+Built on the reverse-engineering work of [OpenZeekr](https://github.com/borconi/openzeekr) (borconi)
+and the projects credited there. No Zeekr secrets are included — you provide your own from your own
+app install. Zeekr is a trademark of its owner; this is an unofficial, independent hobby project with
+no affiliation to Zeekr.
 
-## Licentie
-
-MIT.
+**MIT licensed.**
