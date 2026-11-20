@@ -1,0 +1,8 @@
+{
+  "type": "string",
+  "title": { "en": "Debug (temp)", "nl": "Debug (temp)" },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "icon": "/assets/capabilities/clock.svg"
+}

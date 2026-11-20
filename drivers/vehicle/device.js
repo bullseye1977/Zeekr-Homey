@@ -104,17 +104,16 @@ class ZeekrDevice extends Homey.Device {
     await this.unsetWarning().catch(() => {});
 
     // ---- DEBUG (temperature diagnostics) ----
-    // Logs every field in the status whose key mentions "temp", wherever it sits in the tree,
-    // plus the whole climate block. Lets us see if/where the car reports the outside temperature.
-    // Remove this block once the exterior-temp mapping is confirmed. No GPS/VIN is logged.
+    // Surfaces every status field whose key mentions "temp", wherever it sits in the tree, into
+    // the visible "Debug (temp)" tile on the device page (so no Docker/terminal is needed), and
+    // also logs it. Lets us see if/where the car reports the outside temperature. Remove once the
+    // exterior-temp mapping is confirmed. No GPS/VIN is included.
     try {
       const temps = findTempFields(raw);
-      this.log(`[debug] temp fields (${temps.length}): ${JSON.stringify(temps)}`);
       const climate = raw && raw.additionalVehicleStatus && raw.additionalVehicleStatus.climateStatus;
-      this.log(`[debug] climateStatus present: ${climate ? 'yes' : 'no'}`);
-      if (climate) this.log(`[debug] climateStatus = ${JSON.stringify(climate)}`);
-      const p = parseStatus(raw);
-      this.log(`[debug] parsed interior=${p.interiorTemp} exterior=${p.exteriorTemp}`);
+      const summary = temps.length ? temps.join(' | ') : `no temp fields (climate block: ${climate ? 'present' : 'absent'})`;
+      this.log(`[debug] ${summary}`);
+      if (this.hasCapability('zeekr_debug')) await this.setCapabilityValue('zeekr_debug', summary).catch(() => {});
     } catch (e) {
       this.log(`[debug] temp diagnostics failed: ${e.message}`);
     }
