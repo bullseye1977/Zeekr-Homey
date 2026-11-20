@@ -8,6 +8,26 @@ const { LoggedInElsewhereError, ZeekrError } = require('../../lib/zeekr/ZeekrCli
 /** Re-read the status this long after a command, so Homey shows the car's new state. */
 const REFRESH_AFTER_COMMAND_MS = [20 * 1000, 75 * 1000];
 
+/**
+ * DEBUG helper: walk the raw status tree and collect every field whose key contains "temp"
+ * (case-insensitive), as "path = value". Used to locate the outside-temperature field on cars
+ * that report it somewhere other than climateStatus.exteriorTemp.
+ */
+function findTempFields(node, path = '', out = []) {
+  if (node == null) return out;
+  if (typeof node === 'object') {
+    for (const [k, v] of Object.entries(node)) {
+      const p = path ? `${path}.${k}` : k;
+      if (v !== null && typeof v === 'object') {
+        findTempFields(v, p, out);
+      } else if (/temp/i.test(k)) {
+        out.push(`${p}=${v}`);
+      }
+    }
+  }
+  return out;
+}
+
 class ZeekrDevice extends Homey.Device {
   async onInit() {
     this.vin = this.getData().id;
@@ -82,6 +102,23 @@ class ZeekrDevice extends Homey.Device {
     }
     if (!this.getAvailable()) await this.setAvailable().catch(this.error);
     await this.unsetWarning().catch(() => {});
+
+    // ---- DEBUG (temperature diagnostics) ----
+    // Logs every field in the status whose key mentions "temp", wherever it sits in the tree,
+    // plus the whole climate block. Lets us see if/where the car reports the outside temperature.
+    // Remove this block once the exterior-temp mapping is confirmed. No GPS/VIN is logged.
+    try {
+      const temps = findTempFields(raw);
+      this.log(`[debug] temp fields (${temps.length}): ${JSON.stringify(temps)}`);
+      const climate = raw && raw.additionalVehicleStatus && raw.additionalVehicleStatus.climateStatus;
+      this.log(`[debug] climateStatus present: ${climate ? 'yes' : 'no'}`);
+      if (climate) this.log(`[debug] climateStatus = ${JSON.stringify(climate)}`);
+      const p = parseStatus(raw);
+      this.log(`[debug] parsed interior=${p.interiorTemp} exterior=${p.exteriorTemp}`);
+    } catch (e) {
+      this.log(`[debug] temp diagnostics failed: ${e.message}`);
+    }
+
     await this.applyStatus(parseStatus(raw));
     return true;
   }
